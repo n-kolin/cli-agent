@@ -1,0 +1,14 @@
+[project]
+name = "cli-agent"
+version = "0.1.0"
+description = "Agent that converts natural language to CLI commands"
+requires-python = ">=3.10"
+dependencies = [
+    "gradio>=4.0.0",
+    "openai>=1.0.0",
+    "python-dotenv>=1.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
