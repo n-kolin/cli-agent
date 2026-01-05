@@ -105,7 +105,7 @@ def save_results_to_csv(results: List[Dict], system_prompt: str, csv_file: str =
     
     # Write back to CSV
     fieldnames = ['input', 'expected_output', 'complexity', 'actual_output', 'similarity_score', 'match_status', 'system_prompt']
-    with open(csv_file, 'w', encoding='utf-8', newline='') as f:
+    with open(csv_file, 'w', encoding='utf-8-sig', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(existing_cases)
@@ -190,7 +190,7 @@ def save_run_results(results: List[Dict], system_prompt: str, complexity_filter:
     filename = f"results_{timestamp}.csv"
     fieldnames = ['input', 'expected_output', 'actual_output', 'similarity_score', 'match_status', 'complexity']
     
-    with open(filename, 'w', encoding='utf-8', newline='') as f:
+    with open(filename, 'w', encoding='utf-8-sig', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for result in results:
@@ -226,7 +226,7 @@ def save_run_summary(results: List[Dict], system_prompt: str, complexity_filter:
         complexity_stats[comp]['similarities'].append(result['similarity'])
     
     filename = f"summary_{timestamp}.txt"
-    with open(filename, 'w', encoding='utf-8') as f:
+    with open(filename, 'w', encoding='utf-8-sig') as f:
         f.write("=" * 80 + "\n")
         f.write(f"סיכום הרצה - {timestamp}\n")
         f.write("=" * 80 + "\n\n")
@@ -283,7 +283,7 @@ def update_global_summary(timestamp: str, system_prompt: str, complexity_filter:
     # Check if file exists
     file_exists = os.path.exists(global_file)
     
-    with open(global_file, 'a', encoding='utf-8', newline='') as f:
+    with open(global_file, 'a', encoding='utf-8-sig', newline='') as f:
         fieldnames = [
             'timestamp', 'complexity_filter', 'system_prompt_preview',
             'total_tests', 'passed', 'failed', 'success_rate', 'avg_similarity',
