@@ -28,4 +28,4 @@ input,expected_output,complexity
 צור קובץ ארכיון zip של התיקייה documents,powershell Compress-Archive -Path documents -DestinationPath documents.zip,מורכב
 מצא את כל הקבצים הגדולים מ-100MB בכונן C,forfiles /S /M * /C "cmd /c if @fsize GTR 104857600 echo @path",מורכב
 הפעל בדיקת דיסק על כונן C עם תיקון אוטומטי,chkdsk C: /F,מורכב
-הצג את שימוש המעבד והזיכרון של המערכת,wmic cpu get loadpercentage && wmic OS get FreePhysicalMemory,TotalVisibleMemorySize,מורכב
+מה מזג האויר,UNABLE_TO_PARSE,מורכב
