@@ -1,32 +1,31 @@
-
 input,expected_output,complexity
-"מה כתובת ה-IP של המחשב שלי","ipconfig","פשוט"
-"איזה תהליכים רצים כרגע במערכת","tasklist","פשוט"
-"צור תיקייה בשם backup בתיקייה הנוכחית","mkdir backup","פשוט"
-"הצג את התוכן של הקובץ notes.txt","type notes.txt","פשוט"
-"נקה את המסך","cls","פשוט"
-"בדוק חיבור לרשת לכתובת 8.8.8.8","ping 8.8.8.8","פשוט"
-"הצג את התאריך והשעה הנוכחיים","date /t && time /t","פשוט"
-"הצג את כל המשתנים סביבתיים","set","פשוט"
-"הצג את הנתיב הנוכחי","cd","פשוט"
-"הצג את רשימת הכוננים","wmic logicaldisk get name","פשוט"
-"אני רוצה למחוק את כל הקבצים עם סיומת .tmp בתיקייה downloads","del downloads\*.tmp","בינוני"
-"לסדר את רשימת הקבצים לפי גודל מהגדול לקטן","dir /o-s","בינוני"
-"העתק את הקובץ report.txt לתיקייה docs","copy report.txt docs\","בינוני"
-"שנה את שם הקובץ old.txt ל new.txt","ren old.txt new.txt","בינוני"
-"הצג את כתובת ה-IP של הממשק הפעיל","ipconfig | findstr /i ""IPv4""","בינוני"
-"הראה רק קבצי .log בתיקייה הנוכחית","dir *.log","בינוני"
-"רשום את כל הקבצים והתקיות כולל קבצים נסתרים","dir /a","בינוני"
-"חפש את המילה error בקובץ log.txt","findstr ""error"" log.txt","בינוני"
-"העתק את כל הקבצים מתיקיית source לתיקיית destination","xcopy source destination /E /I","בינוני"
-"הצג את 10 השורות האחרונות של קובץ output.txt","powershell Get-Content output.txt -Tail 10","בינוני"
-"הצג את נתוני תצורת הרשת המתקדמים","ipconfig /all","מורכב"
-"הפסק תהליך עם PID 1234","taskkill /PID 1234 /F","מורכב"
-"צור תיקייה חדשה והעתק לתוכה את כל קבצי ה-PDF מהתיקייה הנוכחית","mkdir pdf_backup && copy *.pdf pdf_backup\","מורכב"
-"חפש בכל התיקיות את הקבצים ששונו ב-7 הימים האחרונים","forfiles /S /D -7 /C ""cmd /c echo @path""","מורכב"
-"הפסק את כל התהליכים של chrome","taskkill /IM chrome.exe /F","מורכב"
-"הצג את 5 התהליכים שצורכים הכי הרבה זיכרון","powershell Get-Process | Sort-Object -Property WS -Descending | Select-Object -First 5","מורכב"
-"צור קובץ ארכיון zip של התיקייה documents","powershell Compress-Archive -Path documents -DestinationPath documents.zip","מורכב"
-"מצא את כל הקבצים הגדולים מ-100MB בכונן C","forfiles /S /M * /C ""cmd /c if @fsize GTR 104857600 echo @path""","מורכב"
-"הפעל בדיקת דיסק על כונן C עם תיקון אוטומטי","chkdsk C: /F","מורכב"
-"הצג את שימוש המעבד והזיכרון של המערכת","wmic cpu get loadpercentage && wmic OS get FreePhysicalMemory,TotalVisibleMemorySize","מורכב"
+מה כתובת ה-IP של המחשב שלי,ipconfig,פשוט
+איזה תהליכים רצים כרגע במערכת,tasklist,פשוט
+צור תיקייה בשם backup בתיקייה הנוכחית,mkdir backup,פשוט
+הצג את התוכן של הקובץ notes.txt,type notes.txt,פשוט
+נקה את המסך,cls,פשוט
+בדוק חיבור לרשת לכתובת 8.8.8.8,ping 8.8.8.8,פשוט
+הצג את התאריך והשעה הנוכחיים,date /t && time /t,פשוט
+הצג את כל המשתנים סביבתיים,set,פשוט
+הצג את הנתיב הנוכחי,cd,פשוט
+הצג את רשימת הכוננים,wmic logicaldisk get name,פשוט
+אני רוצה למחוק את כל הקבצים עם סיומת .tmp בתיקייה downloads,del downloads\*.tmp,בינוני
+לסדר את רשימת הקבצים לפי גודל מהגדול לקטן,dir /o-s,בינוני
+העתק את הקובץ report.txt לתיקייה docs,copy report.txt docs\,בינוני
+שנה את שם הקובץ old.txt ל new.txt,ren old.txt new.txt,בינוני
+הצג את כתובת ה-IP של הממשק הפעיל,ipconfig | findstr /i "IPv4",בינוני
+הראה רק קבצי .log בתיקייה הנוכחית,dir *.log,בינוני
+רשום את כל הקבצים והתקיות כולל קבצים נסתרים,dir /a,בינוני
+חפש את המילה error בקובץ log.txt,findstr "error" log.txt,בינוני
+העתק את כל הקבצים מתיקיית source לתיקיית destination,xcopy source destination /E /I,בינוני
+הצג את 10 השורות האחרונות של קובץ output.txt,powershell Get-Content output.txt -Tail 10,בינוני
+הצג את נתוני תצורת הרשת המתקדמים,ipconfig /all,מורכב
+הפסק תהליך עם PID 1234,taskkill /PID 1234 /F,מורכב
+צור תיקייה חדשה והעתק לתוכה את כל קבצי ה-PDF מהתיקייה הנוכחית,mkdir pdf_backup && copy *.pdf pdf_backup\,מורכב
+חפש בכל התיקיות את הקבצים ששונו ב-7 הימים האחרונים,forfiles /S /D -7 /C "cmd /c echo @path",מורכב
+הפסק את כל התהליכים של chrome,taskkill /IM chrome.exe /F,מורכב
+הצג את 5 התהליכים שצורכים הכי הרבה זיכרון,powershell Get-Process | Sort-Object -Property WS -Descending | Select-Object -First 5,מורכב
+צור קובץ ארכיון zip של התיקייה documents,powershell Compress-Archive -Path documents -DestinationPath documents.zip,מורכב
+מצא את כל הקבצים הגדולים מ-100MB בכונן C,forfiles /S /M * /C "cmd /c if @fsize GTR 104857600 echo @path",מורכב
+הפעל בדיקת דיסק על כונן C עם תיקון אוטומטי,chkdsk C: /F,מורכב
+הצג את שימוש המעבד והזיכרון של המערכת,wmic cpu get loadpercentage && wmic OS get FreePhysicalMemory,TotalVisibleMemorySize,מורכב
