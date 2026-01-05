@@ -1,21 +1,61 @@
-input,expected_output,category,actual_output,similarity_score,match_status
-מה כתובת ה-IP של המחשב שלי,ipconfig,network,,,
-אני רוצה למחוק את כל הקבצים עם סיומת .tmp בתיקייה downloads,del downloads\*.tmp,file_operations,,,
-לסדר את רשימת הקבצים לפי גודל מהגדול לקטן,dir /o-s,file_operations,,,
-איזה תהליכים רצים כרגע במערכת,tasklist,system_info,,,
-הצג את תוכן התיקייה הנוכחית,dir,file_operations,,,
-צור תיקייה חדשה בשם test,mkdir test,file_operations,,,
-העתק את הקובץ file.txt לתיקייה backup,copy file.txt backup\,file_operations,,,
-מחק את התיקייה temp,rmdir temp,file_operations,,,
-הצג את כל הקבצים הנסתרים,dir /a:h,file_operations,,,
-בדוק את מצב החיבור לאינטרנט,ping google.com,network,,,
-הצג את המסלול המלא של התיקייה הנוכחית,cd,navigation,,,
-עצור את התהליך notepad,taskkill /IM notepad.exe,process_management,,,
-הצג את כל החיבורים הפעילים ברשת,netstat -an,network,,,
-נקה את המסך,cls,system,,,
-מצא קבצים עם המילה config בשם,dir *config* /s,file_operations,,,
-הצג את השעה והתאריך הנוכחיים,date /t & time /t,system_info,,,
-הצג את כל הכוננים במערכת,wmic logicaldisk get name,system_info,,,
-פתח את הנוטפד,notepad,applications,,,
-הצג את משתני הסביבה,set,system_info,,,
-הדפס את התוכן של הקובץ file.txt,type file.txt,file_operations,,,
+input,expected_output,complexity
+מה כתובת ה-IP של המחשב שלי,ipconfig,פשוט
+הצג את תוכן התיקייה הנוכחית,dir,פשוט
+איזה תהליכים רצים כרגע במערכת,tasklist,פשוט
+צור תיקייה חדשה בשם test,mkdir test,פשוט
+מחק את התיקייה temp,rmdir temp,פשוט
+בדוק את מצב החיבור לאינטרנט,ping google.com,פשוט
+הצג את המסלול המלא של התיקייה הנוכחית,cd,פשוט
+נקה את המסך,cls,פשוט
+פתח את הנוטפד,notepad,פשוט
+הדפס את התוכן של הקובץ file.txt,type file.txt,פשוט
+הצג את שם המחשב,hostname,פשוט
+הצג את הגרסה של Windows,ver,פשוט
+הצג את כל המשתמשים במערכת,net user,פשוט
+צא מהטרמינל,exit,פשוט
+הצג את רשימת הקבצים,dir,פשוט
+עבור לכונן D,D:,פשוט
+צור קובץ ריק בשם test.txt,type nul > test.txt,פשוט
+הצג עזרה על הפקודה dir,dir /?,פשוט
+נקה את ההיסטוריה של הפקודות,doskey /reinstall,פשוט
+הפעל מחדש את המחשב,shutdown /r,פשוט
+אני רוצה למחוק את כל הקבצים עם סיומת .tmp בתיקייה downloads,del downloads\*.tmp,בינוני
+לסדר את רשימת הקבצים לפי גודל מהגדול לקטן,dir /o-s,בינוני
+העתק את הקובץ file.txt לתיקייה backup,copy file.txt backup\,בינוני
+הצג את כל הקבצים הנסתרים,dir /a:h,בינוני
+עצור את התהליך notepad,taskkill /IM notepad.exe,בינוני
+הצג את השעה והתאריך הנוכחיים,date /t & time /t,בינוני
+הצג את משתני הסביבה,set,בינוני
+העתק את כל הקבצים מתיקיית source ל-dest,xcopy source dest /E,בינוני
+שנה את שם הקובץ old.txt ל-new.txt,ren old.txt new.txt,בינוני
+הצג את כל הקבצים שגדולים מ-1MB,forfiles /S /M * /C "cmd /c if @fsize GTR 1048576 echo @path",בינוני
+מחק את כל הקבצים הריקים בתיקייה,for /r %i in (*) do if %~zi==0 del "%i",בינוני
+הצג את המידע על הדיסק C,chkdsk C:,בינוני
+צור קובץ גיבוי של התיקייה project,xcopy project project_backup /E /I,בינוני
+הצג את כל התהליכים שצורכים יותר מ-100MB,tasklist /fi "memusage gt 102400",בינוני
+העתק רק קבצים חדשים יותר,xcopy source dest /D,בינוני
+מחק את כל הקבצים מסוג .log שישנים מ-7 ימים,forfiles /P . /M *.log /D -7 /C "cmd /c del @path",בינוני
+הצג את כל התיקיות בלבד,dir /ad,בינוני
+שנה את מאפייני הקובץ להסתר,attrib +h file.txt,בינוני
+העבר את כל קבצי ה-PDF לתיקייה docs,move *.pdf docs\,בינוני
+הצג את גודל התיקייה הנוכחית,dir /s,בינוני
+הצג את כל החיבורים הפעילים ברשת,netstat -an,מורכב
+מצא קבצים עם המילה config בשם,dir *config* /s,מורכב
+הצג את כל הכוננים במערכת,wmic logicaldisk get name,מורכב
+הצג את כל התהליכים עם PID וזיכרון,tasklist /v,מורכב
+חפש את המילה error בכל קבצי ה-log,findstr /s /i "error" *.log,מורכב
+הצג את כל החיבורים הפעילים עם שם התהליך,netstat -ano,מורכב
+מחק תיקיות ריקות באופן רקורסיבי,for /f "delims=" %d in ('dir /s /b /ad ^| sort /r') do rd "%d" 2>nul,מורכב
+הצג את השימוש ב-CPU של כל תהליך,wmic cpu get loadpercentage,מורכב
+צור רשימה של כל התוכנות המותקנות,wmic product get name,מורכב
+מצא קבצים שהשתנו ב-24 השעות האחרונות,forfiles /S /D -1 /C "cmd /c echo @path",מורכב
+הצג את כל השירותים הרצים,sc query type= service state= all,מורכב
+בדוק את זמן האתחול של המערכת,systeminfo | find "System Boot Time",מורכב
+הצג את כל הכוננים עם מידע על שטח פנוי,wmic logicaldisk get name,freespace,size,מורכב
+מצא את התהליך שמשתמש בפורט 8080,netstat -ano | findstr :8080,מורכב
+צור גיבוי של הרישום,reg export HKLM backup.reg,מורכב
+הצג את כל האירועים החשובים מיומן המערכת,wevtutil qe System /c:10 /f:text /rd:true,מורכב
+סרוק את הדיסק ותקן שגיאות,chkdsk C: /F /R,מורכב
+הצג את רשימת החיבורים האלחוטיים השמורים,netsh wlan show profiles,מורכב
+מחק את כל הקבצים הזמניים של Windows,del /q /f /s %temp%\*,מורכב
+בדוק אילו פורטים פתוחים במחשב,netstat -an | find "LISTENING",מורכב
