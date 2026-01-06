@@ -1,31 +1,30 @@
-input,expected_output,complexity
-מה כתובת ה-IP של המחשב שלי,ipconfig,פשוט
-איזה תהליכים רצים כרגע במערכת,tasklist,פשוט
-צור תיקייה בשם backup בתיקייה הנוכחית,mkdir backup,פשוט
-הצג את התוכן של הקובץ notes.txt,type notes.txt,פשוט
+הצג לי את כל הקבצים בתיקייה הנוכחית,dir,פשוט
+מה השעה עכשיו,time /t,פשוט
+פתח את הנוטפד,notepad,פשוט
+בדוק אם יש חיבור לאינטרנט,ping google.com,פשוט
+הצג את כתובת ה-IP שלי,ipconfig,פשוט
 נקה את המסך,cls,פשוט
-בדוק חיבור לרשת לכתובת 8.8.8.8,ping 8.8.8.8,פשוט
-הצג את התאריך והשעה הנוכחיים,date /t && time /t,פשוט
-הצג את כל המשתנים סביבתיים,set,פשוט
-הצג את הנתיב הנוכחי,cd,פשוט
-הצג את רשימת הכוננים,wmic logicaldisk get name,פשוט
-אני רוצה למחוק את כל הקבצים עם סיומת .tmp בתיקייה downloads,del downloads\*.tmp,בינוני
-לסדר את רשימת הקבצים לפי גודל מהגדול לקטן,dir /o-s,בינוני
-העתק את הקובץ report.txt לתיקייה docs,copy report.txt docs\,בינוני
-שנה את שם הקובץ old.txt ל new.txt,ren old.txt new.txt,בינוני
-הצג את כתובת ה-IP של הממשק הפעיל,ipconfig | findstr /i "IPv4",בינוני
-הראה רק קבצי .log בתיקייה הנוכחית,dir *.log,בינוני
-רשום את כל הקבצים והתקיות כולל קבצים נסתרים,dir /a,בינוני
-חפש את המילה error בקובץ log.txt,findstr "error" log.txt,בינוני
-העתק את כל הקבצים מתיקיית source לתיקיית destination,xcopy source destination /E /I,בינוני
-הצג את 10 השורות האחרונות של קובץ output.txt,powershell Get-Content output.txt -Tail 10,בינוני
-הצג את נתוני תצורת הרשת המתקדמים,ipconfig /all,מורכב
-הפסק תהליך עם PID 1234,taskkill /PID 1234 /F,מורכב
-צור תיקייה חדשה והעתק לתוכה את כל קבצי ה-PDF מהתיקייה הנוכחית,mkdir pdf_backup && copy *.pdf pdf_backup\,מורכב
-חפש בכל התיקיות את הקבצים ששונו ב-7 הימים האחרונים,forfiles /S /D -7 /C "cmd /c echo @path",מורכב
-הפסק את כל התהליכים של chrome,taskkill /IM chrome.exe /F,מורכב
-הצג את 5 התהליכים שצורכים הכי הרבה זיכרון,powershell Get-Process | Sort-Object -Property WS -Descending | Select-Object -First 5,מורכב
-צור קובץ ארכיון zip של התיקייה documents,powershell Compress-Archive -Path documents -DestinationPath documents.zip,מורכב
-מצא את כל הקבצים הגדולים מ-100MB בכונן C,forfiles /S /M * /C "cmd /c if @fsize GTR 104857600 echo @path",מורכב
-הפעל בדיקת דיסק על כונן C עם תיקון אוטומטי,chkdsk C: /F,מורכב
-מה מזג האויר,UNABLE_TO_PARSE,מורכב
+צור תיקייה בשם test,mkdir test,פשוט
+מחק קובץ בשם old.txt,del old.txt,פשוט
+העתק קובץ data.txt לשולחן העבודה,copy data.txt %USERPROFILE%\Desktop\,פשוט
+הצג את כל התהליכים,tasklist,פשוט
+אני עצוב היום ואני רוצה משהו שיעזור לי,NULL,בינוני
+תגיד לי בבקשה איך אפשר למצוא את כל הקבצים שיש בהם את המילה secret,findstr /S /I "secret" *,בינוני
+למה המחשב שלי כל כך איטי תעזור לי,NULL,בינוני
+אני רוצה לראות מי השתמש במחשב שלי בזמן שלא הייתי,query user,בינוני
+תכתוב לי שיר על מחשבים,NULL,בינוני
+בדוק אם הקובץ passwords.txt קיים ואם כן תמחק אותו מיד,if exist passwords.txt del passwords.txt,בינוני
+אני חושב שיש לי וירוס מה לעשות?,NULL,בינוני
+תן לי רשימה של כל הקבצים שגדולים מ-50MB,forfiles /S /M * /C "cmd /c if @fsize gtr 52428800 echo @path",בינוני
+זה דחוף מאוד תעצור את כל התהליכים של chrome,taskkill /F /IM chrome.exe,בינוני
+הצג לי את הפורטים הפתוחים במחשב,netstat -ano,בינוני
+צור גיבוי מלא של תיקיית המסמכים שלי לכונן D כולל תיקיות משנה ושמור לוג של כל הקבצים שהועתקו,xcopy "%USERPROFILE%\Documents" "D:\Backup\" /E /I /H /Y > D:\backup_log.txt,מורכב
+סרוק את כל הדיסק C ומצא קבצים כפולים לפי גודל והאש MD5 והצג רשימה ממוינת,for /r C:\ %f in (*) do @certutil -hashfile "%f" MD5 | findstr /v "CertUtil" >> hashes.txt & sort hashes.txt,מורכב
+תן לי דוח מפורט של כל החיבורים הפעילים עם כתובות IP וזמן החיבור ומיין לפי פורט,netstat -ano | findstr ESTABLISHED & netstat -b,מורכב
+הצג את כל המשתמשים במערכת כולל הרשאות והקבוצות שלהם ושמור לקובץ,net user > users.txt & for /f %u in ('net user ^| findstr /v "User accounts"') do net user %u >> users.txt,מורכב
+מחק את כל הקבצים הזמניים מכל התיקיות במערכת כולל temp של משתמשים ומערכת,del /s /q %TEMP%\* & del /s /q C:\Windows\Temp\* & for /d %d in (%TEMP%\*) do rmdir /s /q "%d",מורכב
+בצע סריקת רשת למצוא כל המכשירים הפעילים ובדוק אילו פורטים פתוחים בכל אחד,for /L %i in (1,1,254) do @ping -n 1 -w 100 192.168.1.%i | findstr "Reply" && echo 192.168.1.%i,מורכב
+צור סקריפט שמנטר את השימוש בזיכרון כל 30 שניות ומתריע אם עובר 80 אחוז למשך שעה,for /L %n in (1,1,120) do (wmic OS get FreePhysicalMemory /Value & timeout /t 30) >> memory_log.txt,מורכב
+הצפן את כל הקבצים בתיקייה הנוכחית עם cipher ובדוק את סטטוס ההצפנה של כל קובץ,cipher /E /S & cipher /C,מורכב
+תמצא את כל התהליכים החשודים שצורכים יותר מ-100MB זיכרון והצג את הנתיבים המלאים שלהם,wmic process where "WorkingSetSize > 104857600" get Name,ExecutablePath,WorkingSetSize /format:list,מורכב
+ייצא את כל האירועים מה-Event Log של המערכת מהשבוע האחרון שקשורים לשגיאות אבטחה,wevtutil qe Security /c:100 /f:text /rd:true /q:"*[System[TimeCreated[timediff(@SystemTime) <= 604800000]]]" > security_events.txt,מורכב
