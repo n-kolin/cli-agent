@@ -8,13 +8,13 @@
 מחק קובץ בשם old.txt,del old.txt,פשוט
 העתק קובץ data.txt לשולחן העבודה,copy data.txt %USERPROFILE%\Desktop\,פשוט
 הצג את כל התהליכים,tasklist,פשוט
-אני עצוב היום ואני רוצה משהו שיעזור לי,NULL,בינוני
+אני עצוב היום ואני רוצה משהו שיעזור לי,UNABLE_TO_PARSE,בינוני
 תגיד לי בבקשה איך אפשר למצוא את כל הקבצים שיש בהם את המילה secret,findstr /S /I "secret" *,בינוני
-למה המחשב שלי כל כך איטי תעזור לי,NULL,בינוני
+למה המחשב שלי כל כך איטי תעזור לי,UNABLE_TO_PARSE,בינוני
 אני רוצה לראות מי השתמש במחשב שלי בזמן שלא הייתי,query user,בינוני
-תכתוב לי שיר על מחשבים,NULL,בינוני
+תכתוב לי שיר על מחשבים,UNABLE_TO_PARSE,בינוני
 בדוק אם הקובץ passwords.txt קיים ואם כן תמחק אותו מיד,if exist passwords.txt del passwords.txt,בינוני
-אני חושב שיש לי וירוס מה לעשות?,NULL,בינוני
+אני חושב שיש לי וירוס מה לעשות?,UNABLE_TO_PARSE,בינוני
 תן לי רשימה של כל הקבצים שגדולים מ-50MB,forfiles /S /M * /C "cmd /c if @fsize gtr 52428800 echo @path",בינוני
 זה דחוף מאוד תעצור את כל התהליכים של chrome,taskkill /F /IM chrome.exe,בינוני
 הצג לי את הפורטים הפתוחים במחשב,netstat -ano,בינוני
@@ -23,8 +23,8 @@
 תן לי דוח מפורט של כל החיבורים הפעילים עם כתובות IP וזמן החיבור ומיין לפי פורט,netstat -ano | findstr ESTABLISHED & netstat -b,מורכב
 הצג את כל המשתמשים במערכת כולל הרשאות והקבוצות שלהם ושמור לקובץ,net user > users.txt & for /f %u in ('net user ^| findstr /v "User accounts"') do net user %u >> users.txt,מורכב
 מחק את כל הקבצים הזמניים מכל התיקיות במערכת כולל temp של משתמשים ומערכת,del /s /q %TEMP%\* & del /s /q C:\Windows\Temp\* & for /d %d in (%TEMP%\*) do rmdir /s /q "%d",מורכב
-בצע סריקת רשת למצוא כל המכשירים הפעילים ובדוק אילו פורטים פתוחים בכל אחד,for /L %i in (1,1,254) do @ping -n 1 -w 100 192.168.1.%i | findstr "Reply" && echo 192.168.1.%i,מורכב
-צור סקריפט שמנטר את השימוש בזיכרון כל 30 שניות ומתריע אם עובר 80 אחוז למשך שעה,for /L %n in (1,1,120) do (wmic OS get FreePhysicalMemory /Value & timeout /t 30) >> memory_log.txt,מורכב
+בצע סריקת רשת למצוא כל המכשירים הפעילים ובדוק אילו פורטים פתוחים בכל אחד,...,מורכב
+צור סקריפט שמנטר את השימוש בזיכרון כל 30 שניות ומתריע אם עובר 80 אחוז למשך שעה,...,מורכב
 הצפן את כל הקבצים בתיקייה הנוכחית עם cipher ובדוק את סטטוס ההצפנה של כל קובץ,cipher /E /S & cipher /C,מורכב
-תמצא את כל התהליכים החשודים שצורכים יותר מ-100MB זיכרון והצג את הנתיבים המלאים שלהם,wmic process where "WorkingSetSize > 104857600" get Name,ExecutablePath,WorkingSetSize /format:list,מורכב
+תמצא את כל התהליכים החשודים שצורכים יותר מ-100MB זיכרון והצג את הנתיבים המלאים שלהם,...,מורכב
 ייצא את כל האירועים מה-Event Log של המערכת מהשבוע האחרון שקשורים לשגיאות אבטחה,wevtutil qe Security /c:100 /f:text /rd:true /q:"*[System[TimeCreated[timediff(@SystemTime) <= 604800000]]]" > security_events.txt,מורכב
