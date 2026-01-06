@@ -60,7 +60,7 @@ def convert_to_cli(user_input: str, system_prompt: str = None) -> str:
                 {"role": "user", "content": user_input}
             ],
             temperature=0.1,
-            max_tokens=150
+            max_tokens=500
         )
         
         cli_command = response.choices[0].message.content.strip()
