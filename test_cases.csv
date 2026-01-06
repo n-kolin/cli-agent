@@ -1,3 +1,4 @@
+input,expected_output,complexity
 הצג לי את כל הקבצים בתיקייה הנוכחית,dir,פשוט
 מה השעה עכשיו,time /t,פשוט
 פתח את הנוטפד,notepad,פשוט
