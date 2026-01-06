@@ -59,7 +59,7 @@ def convert_to_cli(user_input: str, system_prompt: str = None) -> str:
                 {"role": "system", "content": prompt_to_use},
                 {"role": "user", "content": user_input}
             ],
-            temperature=0.1,
+            temperature=0.3,
             max_tokens=500
         )
         
