@@ -1,4 +1,4 @@
-# CLI Agent - MVP שלב א'
+# CLI Agent
 
 Agent שממיר הוראות בשפה טבעית לפקודות CLI של Windows.
 
@@ -14,150 +14,102 @@ powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### שלב 2: צור את הפרויקט והתקן את החבילות
+### שלב 2: התקן תלויות
 
 ```bash
-# צור סביבה וירטואלית והתקן תלויות
 uv venv
 uv pip install -r requirements.txt
 ```
 
 ### שלב 3: הגדר את מפתח ה-API
 
-1. צור קובץ `.env` בתיקיית הפרויקט
-2. העתק את התוכן מ-`.env.example`
-3. החלף את `your_openai_api_key_here` במפתח API אמיתי מ-OpenAI
+צור קובץ `.env` בתיקיית הפרויקט:
 
 ```bash
-# .env
 OPENAI_API_KEY=sk-...
 ```
 
 ### שלב 4: הרץ את האפליקציה
 
 ```bash
-# הפעל את האפליקציה
 uv run python app.py
 ```
 
 האפליקציה תהיה זמינה בכתובת: http://localhost:7860
 
+## ⚙️ שינוי System Prompt
+
+הפרומפט נמצא בקובץ `system_prompt.md` בתיקיית הפרויקט.
+
+כדי לשנות אותו — ערוך את הקובץ ועשה deploy מחדש. אין ממשק לעריכה בזמן ריצה.
+
 ## 🧪 בדיקות אוטומטיות
 
-הפרויקט כולל מערכת בדיקות אוטומטית מובנית עם שתי אפשרויות:
-
-### אפשרות 1: ממשק Gradio (מומלץ)
+### ממשק Gradio
 
 1. הרץ את האפליקציה: `uv run python app.py`
 2. עבור לטאב "🧪 בדיקות אוטומטיות"
-3. לחץ על "🚀 הרץ את כל הבדיקות"
-4. קבל דוח מפורט עם אחוזי הצלחה, דמיון, ופירוט לכל בדיקה
-5. **התוצאות נשמרות אוטומטית ב-CSV** עם עמודות:
-   - `actual_output` - הפקודה שהתקבלה מה-Agent
-   - `similarity_score` - אחוז הדמיון לפקודה הצפויה
-   - `match_status` - האם הבדיקה עברה (✅ PASS) או נכשלה (❌ FAIL)
+3. בחר רמת מורכבות (הכל / פשוט / בינוני / מורכב)
+4. לחץ על "🚀 הרץ בדיקות"
 
-### אפשרות 2: שורת פקודה
+**כל הרצה יוצרת:**
+- קובץ תוצאות מפורט (`results_TIMESTAMP.csv`)
+- קובץ סיכום (`summary_TIMESTAMP.txt`)
+- עדכון לסיכום גלובלי (`global_summary.csv`)
+
+### שורת פקודה
 
 ```bash
-# הרץ את כל הבדיקות משורת הפקודה
 uv run python test_runner.py
 ```
 
-התוצאות נשמרות אוטומטית ב-`test_cases.csv` עם כל העמודות המעודכנות.
-
 ### מבנה קובץ הבדיקות (test_cases.csv)
-
-הקובץ מכיל את העמודות הבאות:
 
 | עמודה | תיאור | מתעדכן אוטומטית |
 |-------|--------|-----------------|
 | `input` | ההוראה בשפה טבעית | לא |
 | `expected_output` | הפקודה הצפויה | לא |
-| `category` | קטגוריית הבדיקה | לא |
+| `complexity` | רמת מורכבות (פשוט/בינוני/מורכב) | לא |
 | `actual_output` | הפקודה שהתקבלה מה-Agent | **כן ✅** |
 | `similarity_score` | אחוז הדמיון | **כן ✅** |
 | `match_status` | האם עבר/נכשל | **כן ✅** |
 
-### מקרי בדיקה
-
-הקובץ `test_cases.csv` כולל 20 מקרי בדיקה עם:
-- הוראות בשפה טבעית
-- פקודות צפויות
-- קטגוריות (network, file_operations, system_info, וכו')
-
-אתה יכול להוסיף מקרי בדיקה נוספים פשוט על ידי הוספת שורות חדשות ל-CSV.
-
 ### מדדי הצלחה
 
-- ✅ **PASS** - הפקודה זהה או דומה ב-80%+ לפקודה הצפויה
-- ❌ **FAIL** - דמיון נמוך מ-80%
-- המערכת מחשבת גם אחוז הצלחה כולל ודמיון ממוצע
+- ✅ **PASS** — הפקודה זהה או דומה ב-80%+ לפקודה הצפויה
+- ❌ **FAIL** — דמיון נמוך מ-80%
 
-## 📊 עבודה עם תוצאות הבדיקות
+## 🔧 העלאה לענן (Render)
 
-לאחר הרצת הבדיקות, ניתן:
-1. לפתוח את `test_cases.csv` ב-Excel או Google Sheets
-2. לנתח את העמודות `actual_output` ו-`match_status`
-3. לזהות דפוסים של כשלונות
-4. לשפר את הפרומפט על בסיס התוצאות
-5. להשוות בין ריצות שונות
-
-## 🔧 העלאה לענן
-
-### Hugging Face Spaces (מומלץ)
-
-1. צור חשבון ב-[Hugging Face](https://huggingface.co/)
-2. צור Space חדש עם Gradio SDK
-3. העלה את הקבצים:
-   - `app.py`
-   - `requirements.txt`
-   - `test_cases.csv`
-4. הוסף את ה-API Key כ-Secret במקטע Settings
-
-### Google Colab
-
-```python
-# התקנה עם uv
-!pip install uv
-!uv pip install gradio openai python-dotenv
-
-# הרצה
-!uv run python app.py
-```
-
-### Railway / Render
-
-העלה את הקבצים ל-GitHub והתחבר ל-Railway/Render.
-הגדר את `OPENAI_API_KEY` כמשתנה סביבה.
+1. העלה את הפרויקט ל-GitHub
+2. התחבר ל-[Render](https://render.com/) וצור Web Service חדש
+3. הגדר את `OPENAI_API_KEY` כמשתנה סביבה
+4. הגדר את Start Command: `python app.py`
 
 ## 📁 מבנה הפרויקט
 
 ```
 .
-├── app.py                 # אפליקציית Gradio עם ממשק בדיקות
+├── app.py                 # אפליקציית Gradio
 ├── test_runner.py         # סקריפט בדיקות לשורת פקודה
-├── test_cases.csv         # 20 מקרי בדיקה + תוצאות אוטומטיות
+├── system_prompt.md       # System Prompt — ערוך כאן לשינוי התנהגות המודל
+├── test_cases.csv         # מקרי בדיקה + תוצאות אוטומטיות
 ├── requirements.txt       # תלויות Python
-├── pyproject.toml        # הגדרות uv
-├── .env.example          # דוגמה למשתני סביבה
-└── README.md             # המדריך הזה
+├── pyproject.toml         # הגדרות uv
+└── README.md
 ```
 
 ## 📝 הערות
 
-- הפרומפט הראשוני פשוט ומכיל 4 דוגמאות בסיסיות
 - המודל: gpt-4o-mini (מהיר וזול)
-- טמפרטורה נמוכה (0.1) לעקביות
 - מערכת הבדיקות משתמשת באלגוריתם דמיון מחרוזות (difflib)
-- ניתן בקלות להוסיף מקרי בדיקה נוספים ל-CSV
-- **התוצאות נשמרות אוטומטית ב-CSV** - אין צורך בתיעוד ידני!
+- לשינוי הפרומפט — ערוך את `system_prompt.md` ועשה deploy מחדש
 
 ## 🎯 זרימת עבודה מומלצת
 
-1. הרץ בדיקות ראשוניות: `uv run python app.py`
-2. בדוק את `test_cases.csv` - ראה את ה-`actual_output` וה-`match_status`
-3. זהה בעיות חוזרות בפלט של המודל
-4. שפר את הפרומפט ב-`app.py` ו-`test_runner.py`
-5. הרץ שוב והשווה תוצאות
-6. חזור על התהליך עד לשיפור משמעותי
+1. הרץ בדיקות: `uv run python app.py`
+2. בדוק את התוצאות — ראה `actual_output` ו-`match_status`
+3. זהה דפוסי כשלונות
+4. ערוך את `system_prompt.md`
+5. עשה deploy והרץ שוב
+6. חזור עד לשיפור משמעותי
