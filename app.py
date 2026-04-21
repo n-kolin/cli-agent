@@ -14,53 +14,34 @@ load_dotenv()
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# Initial prompt for the LLM
-DEFAULT_SYSTEM_PROMPT = """אתה עוזר שמתמחה בתרגום הוראות בשפה טבעית לפקודות CLI של Windows.
+def load_system_prompt(filepath: str = "system_prompt.md") -> str:
+    """Load system prompt from a markdown file."""
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            return f.read().strip()
+    except FileNotFoundError:
+        raise FileNotFoundError(f"System prompt file '{filepath}' not found. Please create it before running the app.")
 
-המשימה שלך:
-- קבל הוראה בעברית או אנגלית בשפה טבעית
-- תרגם אותה לפקודת CLI מדויקת לטרמינל Windows
-- החזר רק את הפקודה עצמה, ללא הסברים נוספים
+SYSTEM_PROMPT = load_system_prompt()
 
-דוגמאות:
-הוראה: "מה כתובת ה-IP של המחשב שלי"
-פקודה: ipconfig
-
-הוראה: "אני רוצה למחוק את כל הקבצים עם סיומת .tmp בתיקייה downloads"
-פקודה: del downloads\\*.tmp
-
-הוראה: "לסדר את רשימת הקבצים לפי גודל מהגדול לקטן"
-פקודה: dir /o-s
-
-הוראה: "איזה תהליכים רצים כרגע במערכת"
-פקודה: tasklist
-
-חשוב: החזר רק את הפקודה, ללא תוספות."""
-
-current_system_prompt = DEFAULT_SYSTEM_PROMPT
-
-def convert_to_cli(user_input: str, system_prompt: str = None) -> str:
+def convert_to_cli(user_input: str) -> str:
     """
     Convert natural language instruction to CLI command using OpenAI API.
     
     Args:
         user_input: Natural language instruction in Hebrew or English
-        system_prompt: Optional custom system prompt to use
         
     Returns:
         CLI command as a string
     """
-    prompt_to_use = system_prompt if system_prompt else current_system_prompt
-    
     try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": prompt_to_use},
+                {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": user_input}
             ],
             temperature=0.3,
-            # max_tokens=500
         )
         
         cli_command = response.choices[0].message.content.strip()
@@ -110,9 +91,9 @@ def save_results_to_csv(results: List[Dict], system_prompt: str, csv_file: str =
         writer.writeheader()
         writer.writerows(existing_cases)
 
-def run_single_test(user_input: str, expected: str, system_prompt: str, complexity: str = "לא ידוע") -> Dict:
+def run_single_test(user_input: str, expected: str, complexity: str = "לא ידוע") -> Dict:
     """Run a single test and return results."""
-    actual = convert_to_cli(user_input, system_prompt)
+    actual = convert_to_cli(user_input)
     similarity = calculate_similarity(expected, actual)
     is_exact_match = expected.lower() == actual.lower()
     is_similar = similarity >= 0.8
@@ -128,9 +109,8 @@ def run_single_test(user_input: str, expected: str, system_prompt: str, complexi
         'complexity': complexity  # Added complexity tracking
     }
 
-def run_all_tests(complexity_filter: str = "הכל", system_prompt: str = None) -> tuple:
+def run_all_tests(complexity_filter: str = "הכל") -> tuple:
     """Run all tests from CSV and return formatted results + files for download."""
-    prompt_to_use = system_prompt if system_prompt else current_system_prompt
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
     test_cases = load_test_cases()
@@ -148,15 +128,14 @@ def run_all_tests(complexity_filter: str = "הכל", system_prompt: str = None) 
         result = run_single_test(
             test_case['input'], 
             test_case['expected_output'], 
-            prompt_to_use,
             test_case.get('complexity', 'פשוט')
         )
         results.append(result)
     
     # Save all the files
-    results_file = save_run_results(results, prompt_to_use, complexity_filter, timestamp)
-    summary_file = save_run_summary(results, prompt_to_use, complexity_filter, timestamp)
-    update_global_summary(timestamp, prompt_to_use, complexity_filter, results)
+    results_file = save_run_results(results, complexity_filter, timestamp)
+    summary_file = save_run_summary(results, complexity_filter, timestamp)
+    update_global_summary(timestamp, complexity_filter, results)
     
     # Calculate summary
     total = len(results)
@@ -183,7 +162,7 @@ def run_all_tests(complexity_filter: str = "הכל", system_prompt: str = None) 
     
     return output, results_file, summary_file, "global_summary.csv"
 
-def save_run_results(results: List[Dict], system_prompt: str, complexity_filter: str, timestamp: str):
+def save_run_results(results: List[Dict], complexity_filter: str, timestamp: str):
     """
     Save individual run results to a separate CSV file with timestamp.
     """
@@ -205,9 +184,9 @@ def save_run_results(results: List[Dict], system_prompt: str, complexity_filter:
     
     return filename
 
-def save_run_summary(results: List[Dict], system_prompt: str, complexity_filter: str, timestamp: str):
+def save_run_summary(results: List[Dict], complexity_filter: str, timestamp: str):
     """
-    Save a summary file for this specific run with the system prompt and statistics.
+    Save a summary file for this specific run with statistics.
     """
     total = len(results)
     passed = sum(1 for r in results if '✅' in r['status'])
@@ -231,9 +210,7 @@ def save_run_summary(results: List[Dict], system_prompt: str, complexity_filter:
         f.write(f"סיכום הרצה - {timestamp}\n")
         f.write("=" * 80 + "\n\n")
         
-        f.write("SYSTEM PROMPT:\n")
-        f.write("-" * 80 + "\n")
-        f.write(system_prompt + "\n")
+        f.write("SYSTEM PROMPT FILE: system_prompt.md\n")
         f.write("-" * 80 + "\n\n")
         
         f.write("סטטיסטיקות כלליות:\n")
@@ -255,7 +232,7 @@ def save_run_summary(results: List[Dict], system_prompt: str, complexity_filter:
     
     return filename
 
-def update_global_summary(timestamp: str, system_prompt: str, complexity_filter: str, results: List[Dict]):
+def update_global_summary(timestamp: str, complexity_filter: str, results: List[Dict]):
     """
     Update the global summary file that tracks all runs across different system prompts.
     """
@@ -285,7 +262,7 @@ def update_global_summary(timestamp: str, system_prompt: str, complexity_filter:
     
     with open(global_file, 'a', encoding='utf-8-sig', newline='') as f:
         fieldnames = [
-            'timestamp', 'complexity_filter', 'system_prompt_preview',
+            'timestamp', 'complexity_filter', 'system_prompt_file',
             'total_tests', 'passed', 'failed', 'success_rate', 'avg_similarity',
             'simple_tests', 'simple_passed', 'simple_success_rate', 'simple_avg_sim',
             'medium_tests', 'medium_passed', 'medium_success_rate', 'medium_avg_sim',
@@ -299,7 +276,7 @@ def update_global_summary(timestamp: str, system_prompt: str, complexity_filter:
         row = {
             'timestamp': timestamp,
             'complexity_filter': complexity_filter,
-            'system_prompt_preview': system_prompt[:100].replace('\n', ' '),
+            'system_prompt_file': 'system_prompt.md',
             'total_tests': total,
             'passed': passed,
             'failed': total - passed,
@@ -322,15 +299,6 @@ def update_global_summary(timestamp: str, system_prompt: str, complexity_filter:
                 row[f'{csv_prefix}_avg_sim'] = 0
         
         writer.writerow(row)
-
-def update_system_prompt(new_prompt: str) -> str:
-    """Update the global system prompt."""
-    global current_system_prompt
-    if new_prompt.strip():
-        current_system_prompt = new_prompt
-        return f"✅ System Prompt עודכן בהצלחה!\n\nהפרומפט החדש:\n{new_prompt[:200]}..."
-    else:
-        return "❌ שגיאה: System Prompt לא יכול להיות ריק"
 
 def download_csv() -> str:
     """Return the path to the CSV file for download."""
@@ -381,43 +349,6 @@ with gr.Blocks(title="CLI Command Generator", theme=gr.themes.Soft()) as demo:
             submit_btn.click(fn=convert_to_cli, inputs=input_text, outputs=output_text)
             input_text.submit(fn=convert_to_cli, inputs=input_text, outputs=output_text)
         
-        with gr.Tab("⚙️ הגדרות System Prompt"):
-            gr.Markdown("### ערוך את ה-System Prompt")
-            gr.Markdown("כאן תוכל לשנות את ההוראות שה-AI מקבל לפני כל תרגום")
-            
-            with gr.Row():
-                with gr.Column():
-                    system_prompt_input = gr.Textbox(
-                        label="System Prompt",
-                        value=DEFAULT_SYSTEM_PROMPT,
-                        lines=15,
-                        placeholder="הכנס את ה-System Prompt החדש כאן...",
-                        rtl=True
-                    )
-                    
-                    with gr.Row():
-                        update_prompt_btn = gr.Button("💾 עדכן System Prompt", variant="primary")
-                        reset_prompt_btn = gr.Button("🔄 אפס לברירת מחדל")
-                    
-                    prompt_status = gr.Markdown()
-            
-            def reset_prompt():
-                global current_system_prompt
-                current_system_prompt = DEFAULT_SYSTEM_PROMPT
-                return DEFAULT_SYSTEM_PROMPT, "✅ System Prompt אופס לברירת מחדל"
-            
-            update_prompt_btn.click(
-                fn=update_system_prompt,
-                inputs=system_prompt_input,
-                outputs=prompt_status
-            )
-            
-            reset_prompt_btn.click(
-                fn=reset_prompt,
-                inputs=None,
-                outputs=[system_prompt_input, prompt_status]
-            )
-        
         with gr.Tab("🧪 בדיקות אוטומטיות"):
             gr.Markdown("### הרץ את כל מקרי הבדיקה מקובץ test_cases.csv")
             gr.Markdown("הבדיקות שוות את הפלט של המודל לפקודות הצפויות ומחשבות אחוז דמיון")
@@ -440,11 +371,8 @@ with gr.Blocks(title="CLI Command Generator", theme=gr.themes.Soft()) as demo:
                 summary_file_output = gr.File(label="📊 סיכום הרצה", visible=True)
                 global_file_output = gr.File(label="🌍 סיכום גלובלי", visible=True)
             
-            def run_tests_wrapper(complexity):
-                return run_all_tests(complexity)
-            
             test_btn.click(
-                fn=run_tests_wrapper,
+                fn=run_all_tests,
                 inputs=complexity_dropdown,
                 outputs=[test_output, results_file_output, summary_file_output, global_file_output]
             )

@@ -11,28 +11,15 @@ load_dotenv()
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# Initial prompt (same as in app.py)
-SYSTEM_PROMPT = """אתה עוזר שמתמחה בתרגום הוראות בשפה טבעית לפקודות CLI של Windows.
+def load_system_prompt(filepath: str = "system_prompt.md") -> str:
+    """Load system prompt from a markdown file."""
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            return f.read().strip()
+    except FileNotFoundError:
+        raise FileNotFoundError(f"System prompt file '{filepath}' not found.")
 
-המשימה שלך:
-- קבל הוראה בעברית או אנגלית בשפה טבעית
-- תרגם אותה לפקודת CLI מדויקת לטרמינל Windows
-- החזר רק את הפקודה עצמה, ללא הסברים נוספים
-
-דוגמאות:
-הוראה: "מה כתובת ה-IP של המחשב שלי"
-פקודה: ipconfig
-
-הוראה: "אני רוצה למחוק את כל הקבצים עם סיומת .tmp בתיקייה downloads"
-פקודה: del downloads\\*.tmp
-
-הוראה: "לסדר את רשימת הקבצים לפי גודל מהגדול לקטן"
-פקודה: dir /o-s
-
-הוראה: "איזה תהליכים רצים כרגע במערכת"
-פקודה: tasklist
-
-חשוב: החזר רק את הפקודה, ללא תוספות."""
+SYSTEM_PROMPT = load_system_prompt()
 
 
 def convert_to_cli(user_input: str) -> str:
